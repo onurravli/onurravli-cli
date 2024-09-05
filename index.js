@@ -124,10 +124,6 @@ const main = () => {
   newline();
   console.log(wrapText(config.description, { width: 80 }));
   newline();
-  title(config.contact.title);
-  newline();
-  printSection(config.contact.content);
-  newline();
   title(config.abilitiesAndTechStack.title);
   newline();
   printSection(config.abilitiesAndTechStack.content);
@@ -135,6 +131,10 @@ const main = () => {
   title(config.education.title);
   newline();
   printSection(config.education.content);
+  newline();
+  title(config.contact.title);
+  newline();
+  printSection(config.contact.content);
   newline();
 };
 
