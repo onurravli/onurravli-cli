@@ -1,0 +1,26 @@
+{
+  "name": "onurravli",
+  "version": "5.0.0",
+  "author": {
+    "name": "Onur Ravli",
+    "email": "onur@onurravli.com",
+    "url": "https://onurravli.com"
+  },
+  "bin": {
+    "onurravli": "./index.js"
+  },
+  "keywords": [
+    "onur ravli",
+    "onurravli"
+  ],
+  "main": "./index.js",
+  "exports": "./index.js",
+  "type": "module",
+  "dependencies": {
+    "chalk": "4.1.2",
+    "word-wrap": "^1.2.5"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}
