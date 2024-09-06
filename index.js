@@ -44,23 +44,6 @@ const config = {
         title: `Databases`,
         items: [`MongoDB`, `PostgreSQL`, `MySQL`, `Redis`],
       },
-      {
-        title: `Other`,
-        items: [
-          `Git`,
-          `RestAPI`,
-          `GraphQL`,
-          `Docker`,
-          `Docker Compose`,
-          `Amazon EC2`,
-          `Amazon Lambda`,
-          `Joi`,
-          `Axios`,
-          `Jest`,
-          `Postman`,
-          `Swagger`,
-        ],
-      },
     ],
   },
   education: {
@@ -114,7 +97,7 @@ const printSection = (array) => {
         items += `${item}, `;
       }
     });
-    console.log(wrapText(`${chalk.bold(`• ${section.title}:`)} ${items}`));
+    console.log(wrapText(`${chalk.bold(`• ${section.title}:`)} ${items}`, { width: 100 }));
   });
 };
 
@@ -122,7 +105,7 @@ const main = () => {
   newline();
   title(config.title);
   newline();
-  console.log(wrapText(config.description, { width: 80 }));
+  console.log(wrapText(config.description, { width: 100 }));
   newline();
   title(config.abilitiesAndTechStack.title);
   newline();
