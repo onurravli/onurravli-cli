@@ -1,6 +1,6 @@
 {
   "name": "onurravli",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "author": {
     "name": "Onur Ravli",
     "email": "onur@onurravli.com",
@@ -17,10 +17,10 @@
   "exports": "./index.js",
   "type": "module",
   "dependencies": {
-    "chalk": "4.1.2",
+    "chalk": "5.4.1",
     "word-wrap": "^1.2.5"
   },
   "devDependencies": {
-    "prettier": "^3.3.3"
+    "prettier": "^3.4.2"
   }
 }
