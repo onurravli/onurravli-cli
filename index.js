@@ -5,53 +5,163 @@
 import chalk from "chalk";
 import wrap from "word-wrap";
 
+const WRAP_WIDTH = 200;
+
 const config = {
-  title: `Onur Ravli ― Full-Stack Developer 🚀`,
-  description: `I am experienced in full-stack development with proficiency in TypeScript, Python, and Java. I have worked with various backend and frontend tools, including Node.js, Express.js, Spring Boot, Django, React.js, React Native and Next.js. Now, I am currently seeking opportunities to further develop my skills and contribute to innovative projects within the tech industry.`,
-  contact: {
-    title: `Contact ☎️`,
-    content: [
+  title: "Hi, I am $Onur Ravli$!",
+  description:
+    "A full-stack developer passionate about building modern and scalable applications, focused on backend development, from Türkiye.",
+  experience: {
+    title: "Experience",
+    description: "My professional journey so far.",
+    items: [
       {
-        title: `Email`,
-        items: ["onur@onurravli.com"],
+        company: "Acanio LLC",
+        position: "Full-Stack Developer",
+        location: "Orlando, Florida, USA",
+        startDate: "February 2025",
+        endDate: "May 2025",
+        notes: [
+          "Contributing to company's products, including a web application, using JavaScript, TypeScript and React.",
+          "Collaborating with designers to implement new features and improve the user experience.",
+          "Fixing bugs and improving the codebase.",
+          "Writing unit tests and learning test-driven development practices.",
+          "Participating in code reviews to learn modern best practices from senior developers.",
+        ],
+        technologies: ["JavaScript", "TypeScript", "React.js", "Node.js", "PostgreSQL", "Tailwind CSS"],
       },
       {
-        title: `LinkedIn`,
-        items: ["linkedin.com/in/onurravli"],
+        company: "Doc Design and Informatics Ltd.",
+        position: "Full-Stack Developer",
+        location: "Istanbul, Türkiye",
+        startDate: "March 2024",
+        endDate: "November 2024",
+        notes: [
+          "Development of both backend and frontend software for .DOC and its clients primarily using Node.js, Strapi.js, React.js, Python, and PostgreSQL.",
+          "Writing both unit and integration tests for codebases.",
+          "Reviewing code and maintaining legacy code to ensure consistency.",
+        ],
+        technologies: [
+          "JavaScript",
+          "TypeScript",
+          "React.js",
+          "React Native",
+          "Node.js",
+          "Python",
+          "PostgreSQL",
+          "Tailwind CSS",
+          "Strapi",
+        ],
       },
       {
-        title: `GitHub`,
-        items: ["github.com/onurravli"],
+        company: "Jotform",
+        position: "Summer Intern",
+        location: "Ankara, Türkiye",
+        startDate: "August 2023",
+        endDate: "September 2023",
+        notes: [
+          "Development of a revision history system for their product, Jotform Approvals, with my team, Jr. Source, as an internship project using Node.js, React.js, SCSS, PHP, and MySQL.",
+        ],
+        technologies: [
+          "JavaScript",
+          "TypeScript",
+          "React.js",
+          "Node.js",
+          "PostgreSQL",
+          "Tailwind CSS",
+          "SCSS",
+          "PHP",
+          "MySQL",
+        ],
+      },
+      {
+        company: "Üstünova Engineering",
+        position: "Summer Intern",
+        location: "Ankara, Türkiye",
+        startDate: "July 2023",
+        endDate: "August 2023",
+        notes: [
+          "Frontend development of a dashboard and a control panel for an EV charging station software, Electr-INN, using Next.js, Node.js, and Django.",
+        ],
+        technologies: ["JavaScript", "TypeScript", "React.js", "Node.js", "Tailwind CSS", "Next.js", "Django"],
       },
     ],
   },
-  abilitiesAndTechStack: {
-    title: `Abilities and Tech Stack 💻`,
-    content: [
+  skills: {
+    title: "Skills",
+    description: "Tools and technologies I use",
+    items: [
       {
-        title: `Programming Languages`,
-        items: [`TypeScript`, `Python`, `Java`],
+        title: "Programming Languages",
+        items: ["JavaScript", "TypeScript", "Python", "Java"],
       },
       {
-        title: `Backend Frameworks & Runtimes`,
-        items: [`Node.js`, `Express.js`, `Nest.js`, `Django`, `Spring Boot`],
+        title: "Backend Tools",
+        items: ["Node.js", "Express.js", "Nest.js", "Django", "Spring Boot", "Flask"],
       },
       {
-        title: `Frontend Frameworks & Runtimes`,
-        items: [`React.js`, `React Native`, `Next.js`, `Tailwind CSS`, `SCSS`, `SASS`],
+        title: "Frontend Tools",
+        items: ["React.js", "React Native", "Next.js", "TailwindCSS", "Electron", "SCSS"],
       },
       {
-        title: `Databases`,
-        items: [`MongoDB`, `PostgreSQL`, `MySQL`, `Redis`],
+        title: "Databases",
+        items: ["MongoDB", "PostgreSQL", "MySQL", "Redis"],
+      },
+      {
+        title: "DevOps",
+        items: ["Github Actions", "Docker", "Docker Compose", "AWS EC2", "AWS Lambda", "AWS S3", "Bash"],
+      },
+      {
+        title: "Other Tools",
+        items: ["Git", "GraphQL", "Jest", "Postman", "Swagger", "Jira", "Slack", "Notion"],
+      },
+      {
+        title: "Design",
+        items: ["Figma", "Photoshop", "Illustrator", "XD"],
+      },
+      {
+        title: "Languages",
+        items: ["English", "Turkish"],
       },
     ],
   },
   education: {
-    title: `Education 🎓`,
-    content: [
+    title: "Education",
+    description: "Where I've learned and grown",
+    items: [
       {
-        title: `Bachelor of Engineering`,
-        items: [`Konya Techical University`, `2022-2025 (Expected)`],
+        title: "Bachelor of Engineering",
+        items: ["Konya Techical University", "2022-2025 (Expected)"],
+      },
+    ],
+  },
+  contact: {
+    title: "Contact",
+    description: "Let's connect and discuss our next project.",
+    items: [
+      {
+        title: "Email",
+        items: ["mailto:onur@onurravli.com"],
+      },
+      {
+        title: "GitHub",
+        items: ["github.com/onurravli"],
+      },
+      {
+        title: "LinkedIn",
+        items: ["linkedin.com/in/onurravli"],
+      },
+      {
+        title: "BlueSky",
+        items: ["bsky.app/profile/onurravli.com"],
+      },
+      {
+        title: "X",
+        items: ["x.com/onurravli"],
+      },
+      {
+        title: "Instagram",
+        items: ["instagram.com/onurravli"],
       },
     ],
   },
@@ -64,7 +174,7 @@ const config = {
  * @returns
  */
 const wrapText = (text, options) => {
-  return wrap(text, { width: 200, ...options });
+  return wrap(text, { width: WRAP_WIDTH * 2, ...options });
 };
 
 /**
@@ -77,10 +187,21 @@ const newline = () => {
 /**
  *
  * @param {String} text
- * @returns Bold text
+ * @returns Bold text with highlighted sections between $ symbols
  */
 const title = (text) => {
-  return console.log(chalk.bold(text));
+  const parts = text.split("$");
+  const processedText = parts
+    .map((part, index) => {
+      return index % 2 === 0 ? chalk.bold(part) : chalk.bold.bgRed.white(part);
+    })
+    .join("");
+
+  return console.log(processedText);
+};
+
+const sectionTitle = (title, description) => {
+  return console.log(chalk.bold(title), chalk.white(description));
 };
 
 /**
@@ -97,27 +218,46 @@ const printSection = (array) => {
         items += `${item}, `;
       }
     });
-    console.log(wrapText(`${chalk.bold(`• ${section.title}:`)} ${items}`, { width: 100 }));
+    console.log(wrapText(`${chalk.bold(`• ${section.title}`)} ${items}`, { width: WRAP_WIDTH }));
   });
+};
+
+/**
+ * Prints the experience section
+ * @param {Array} array Experience items array
+ */
+const printExperience = (array) => {
+  array.forEach((item) => {
+    console.log(
+      wrapText(
+        `${chalk.bold(`• ${item.position} at ${item.company}`)} — ${item.location} (${item.startDate} - ${item.endDate})`,
+        { width: WRAP_WIDTH },
+      ),
+    );
+  });
+  newline();
 };
 
 const main = () => {
   newline();
   title(config.title);
   newline();
-  console.log(wrapText(config.description, { width: 100 }));
+  console.log(wrapText(config.description, { width: WRAP_WIDTH }));
   newline();
-  title(config.abilitiesAndTechStack.title);
+  sectionTitle(config.experience.title, config.experience.description);
   newline();
-  printSection(config.abilitiesAndTechStack.content);
+  printExperience(config.experience.items);
+  sectionTitle(config.skills.title, config.skills.description);
   newline();
-  title(config.education.title);
+  printSection(config.skills.items);
   newline();
-  printSection(config.education.content);
+  sectionTitle(config.education.title, config.education.description);
   newline();
-  title(config.contact.title);
+  printSection(config.education.items);
   newline();
-  printSection(config.contact.content);
+  sectionTitle(config.contact.title, config.contact.description);
+  newline();
+  printSection(config.contact.items);
   newline();
 };
 
