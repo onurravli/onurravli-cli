@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import chalk from "chalk";
+import got from "got";
+import img from "terminal-image";
 import wrap from "word-wrap";
 
 const WRAP_WIDTH = 200;
@@ -21,44 +23,6 @@ const config = {
         notes: [],
         technologies: ["JavaScript", "TypeScript", "React.js", "Node.js", "PostgreSQL", "Tailwind CSS"],
       },
-      // {
-      //   company: "Acanio LLC",
-      //   position: "Full-Stack Developer",
-      //   location: "Orlando, Florida, USA",
-      //   startDate: "February 2025",
-      //   endDate: "May 2025",
-      //   notes: [
-      //     "Contributing to company's products, including a web application, using JavaScript, TypeScript and React.",
-      //     "Collaborating with designers to implement new features and improve the user experience.",
-      //     "Fixing bugs and improving the codebase.",
-      //     "Writing unit tests and learning test-driven development practices.",
-      //     "Participating in code reviews to learn modern best practices from senior developers.",
-      //   ],
-      //   technologies: ["JavaScript", "TypeScript", "React.js", "Node.js", "PostgreSQL", "Tailwind CSS"],
-      // },
-      // {
-      //   company: "Doc Design and Informatics Ltd.",
-      //   position: "Full-Stack Developer",
-      //   location: "Istanbul, Türkiye",
-      //   startDate: "March 2024",
-      //   endDate: "November 2024",
-      //   notes: [
-      //     "Development of both backend and frontend software for .DOC and its clients primarily using Node.js, Strapi.js, React.js, Python, and PostgreSQL.",
-      //     "Writing both unit and integration tests for codebases.",
-      //     "Reviewing code and maintaining legacy code to ensure consistency.",
-      //   ],
-      //   technologies: [
-      //     "JavaScript",
-      //     "TypeScript",
-      //     "React.js",
-      //     "React Native",
-      //     "Node.js",
-      //     "Python",
-      //     "PostgreSQL",
-      //     "Tailwind CSS",
-      //     "Strapi",
-      //   ],
-      // },
       {
         company: "Jotform",
         position: "Summer Intern",
@@ -129,16 +93,6 @@ const config = {
         title: "Languages",
         items: ["English", "Turkish"],
       },
-    ],
-  },
-  education: {
-    title: "Education",
-    description: "Where I've learned and grown",
-    items: [
-      // {
-      //   title: "Bachelor of Engineering",
-      //   items: ["Konya Techical University", "2022-2025 (Expected)"],
-      // },
     ],
   },
   contact: {
@@ -251,23 +205,33 @@ const printExperience = (array) => {
   newline();
 };
 
-const main = () => {
-  newline();
-  title(config.title);
-  newline();
-  console.log(wrapText(config.description, { width: WRAP_WIDTH }));
-  newline();
-  sectionTitle(config.experience.title, config.experience.description);
-  newline();
-  printExperience(config.experience.items);
-  sectionTitle(config.skills.title, config.skills.description);
-  newline();
-  printSection(config.skills.items);
-  newline();
-  sectionTitle(config.contact.title, config.contact.description);
-  newline();
-  printSection(config.contact.items);
-  newline();
+const main = async () => {
+  got("https://avatars3.githubusercontent.com/u/47084109?s=600&v=4", {
+    responseType: "buffer",
+  })
+    .then((image) => {
+      return img.buffer(image.body, { width: "20%", height: "20%" });
+    })
+    .then((image) => {
+      newline();
+      console.log(image);
+      newline();
+      title(config.title);
+      newline();
+      console.log(wrapText(config.description, { width: WRAP_WIDTH }));
+      newline();
+      sectionTitle(config.experience.title, config.experience.description);
+      newline();
+      printExperience(config.experience.items);
+      sectionTitle(config.skills.title, config.skills.description);
+      newline();
+      printSection(config.skills.items);
+      newline();
+      sectionTitle(config.contact.title, config.contact.description);
+      newline();
+      printSection(config.contact.items);
+      newline();
+    });
 };
 
 main();

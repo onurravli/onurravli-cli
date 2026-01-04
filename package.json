@@ -1,13 +1,13 @@
 {
   "name": "onurravli",
-  "version": "6.0.2",
+  "version": "6.1.0",
   "author": {
     "name": "Onur Ravli",
     "email": "onur@onurravli.com",
     "url": "https://onurravli.com"
   },
   "bin": {
-    "onurravli": "./index.js"
+    "onurravli": "index.js"
   },
   "keywords": [
     "onur ravli",
@@ -18,6 +18,8 @@
   "type": "module",
   "dependencies": {
     "chalk": "5.4.1",
+    "got": "^14.6.6",
+    "terminal-image": "^4.1.0",
     "word-wrap": "^1.2.5"
   },
   "devDependencies": {
