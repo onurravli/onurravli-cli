@@ -1,6 +1,6 @@
 {
 	"name": "onurravli",
-	"version": "6.2.0",
+	"version": "6.2.1",
 	"description": "Onur Ravli — Full-Stack Developer. Resume as a CLI: npx onurravli",
 	"author": {
 		"name": "Onur Ravli",
@@ -40,6 +40,7 @@
 	},
 	"dependencies": {
 		"chalk": "5.4.1",
+		"jimp": "^1.6.0",
 		"terminal-image": "^4.1.0"
 	},
 	"devDependencies": {

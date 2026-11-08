@@ -64,15 +64,43 @@ const section = (title) => {
   );
 };
 
+const { env } = process;
+const isKitty =
+  env.TERM === "xterm-kitty" ||
+  env.KITTY_WINDOW_ID ||
+  env.TERM_PROGRAM === "ghostty" ||
+  env.TERM_PROGRAM === "WezTerm" ||
+  env.KONSOLE_VERSION;
+
+/** Kitty graphics protocol, quiet (q=2) so the terminal doesn't echo "OK" replies into the shell. */
+const kittyImage = async (buffer) => {
+  const { Jimp } = await import("jimp");
+  const image = (await Jimp.fromBuffer(buffer)).resize({ w: 256 });
+  const png = (await image.getBuffer("image/png")).toString("base64");
+  const cols = process.stdout.columns || 80;
+  const rows = Math.max(6, Math.floor((process.stdout.rows || 24) * 0.2));
+  // Square photo, cells are ~2:1 — fit in 20% of the width and height like the iTerm path.
+  const size = rows * 2 <= cols * 0.2 ? `r=${rows}` : `c=${Math.floor(cols * 0.2)}`;
+  const chunks = png.match(/.{1,4096}/g);
+  const data = chunks
+    .map((chunk, i) => {
+      const more = i < chunks.length - 1 ? 1 : 0;
+      return i === 0 ? `\x1b_Gf=100,a=T,q=2,${size},m=${more};${chunk}\x1b\\` : `\x1b_Gm=${more};${chunk}\x1b\\`;
+    })
+    .join("");
+  return `${data}\n`;
+};
+
 const avatar = async () => {
   if (args.has("--no-image")) return null;
   try {
     const res = await fetch(profile.avatar, { signal: AbortSignal.timeout(3000) });
     if (!res.ok) return null;
     const buffer = Buffer.from(await res.arrayBuffer());
-    // Native inline images (iTerm, Kitty, WezTerm) are sharp but get swallowed by tmux;
-    // there, fall back to colored half-block characters.
-    if (process.env.TMUX) return `${await terminalImage.buffer(buffer, { width: 24, preferNativeRender: false })}\n`;
+    // tmux swallows inline image protocols; use colored half-block characters there.
+    if (env.TMUX) return `${await terminalImage.buffer(buffer, { width: 24, preferNativeRender: false })}\n`;
+    if (isKitty) return await kittyImage(buffer);
+    // iTerm inline image, or half-blocks in terminals without image support.
     return await terminalImage.buffer(buffer, { width: "20%", height: "20%" });
   } catch {
     return null;
@@ -80,7 +108,7 @@ const avatar = async () => {
 };
 
 const printHeader = (image) => {
-  console.log(image ? `\n${image.replace(/^/gm, PAD)}` : "");
+  console.log(image ? `\n${image.replace(/^(?=.)/gm, PAD)}` : "");
   console.log(`${PAD}${chalk.bold("Hi, I'm")} ${accent.bold(profile.name)}`);
   console.log(`${PAD}${chalk.dim(`${profile.role} · ${profile.location}`)}`);
   console.log();
