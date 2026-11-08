@@ -1,26 +1,46 @@
 {
 	"name": "onurravli",
-	"version": "6.1.1",
+	"version": "6.2.0",
+	"description": "Onur Ravli — Full-Stack Developer. Resume as a CLI: npx onurravli",
 	"author": {
 		"name": "Onur Ravli",
 		"email": "onur@onurravli.com",
 		"url": "https://onurravli.com"
 	},
+	"license": "MIT",
+	"homepage": "https://www.onurravli.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/onurravli/onurravli-cli.git"
+	},
+	"type": "module",
 	"bin": {
 		"onurravli": "index.js"
 	},
-	"keywords": [
-		"onur ravli",
-		"onurravli"
-	],
 	"main": "./index.js",
 	"exports": "./index.js",
-	"type": "module",
+	"files": [
+		"index.js",
+		"data.js"
+	],
+	"engines": {
+		"node": ">=20"
+	},
+	"keywords": [
+		"onur ravli",
+		"onurravli",
+		"resume",
+		"cv",
+		"cli",
+		"npx"
+	],
+	"scripts": {
+		"start": "node index.js",
+		"format": "prettier --write ."
+	},
 	"dependencies": {
 		"chalk": "5.4.1",
-		"got": "^14.6.6",
-		"terminal-image": "^4.1.0",
-		"word-wrap": "^1.2.5"
+		"terminal-image": "^4.1.0"
 	},
 	"devDependencies": {
 		"prettier": "^3.4.2"

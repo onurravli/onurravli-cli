@@ -1,284 +1,161 @@
 #!/usr/bin/env node
 
 import chalk from "chalk";
-import got from "got";
-import img from "terminal-image";
-import wrap from "word-wrap";
+import terminalImage from "terminal-image";
+import * as data from "./data.js";
 
-const WRAP_WIDTH = 200;
+const args = new Set(process.argv.slice(2));
 
-const config = {
-	title: "Hi, I am $Onur Ravli$!",
-	description:
-		"A full-stack developer passionate about building modern and scalable applications, from Türkiye.",
-	experience: {
-		title: "Experience",
-		description: "My professional journey so far.",
-		items: [
-			{
-				company: "Insider One",
-				position: "Software Developer",
-				location: "Istanbul, Türkiye",
-				startDate: "July 2025",
-				endDate: "Present",
-				notes: [],
-				technologies: [
-					"JavaScript",
-					"TypeScript",
-					"React.js",
-					"Node.js",
-					"PostgreSQL",
-					"Tailwind CSS",
-				],
-			},
-			{
-				company: "Jotform",
-				position: "Summer Intern",
-				location: "Ankara, Türkiye",
-				startDate: "August 2023",
-				endDate: "September 2023",
-				notes: [
-					"Development of a revision history system for their product, Jotform Approvals, with my team, Jr. Source, as an internship project using Node.js, React.js, SCSS, PHP, and MySQL.",
-				],
-				technologies: [
-					"JavaScript",
-					"TypeScript",
-					"React.js",
-					"Node.js",
-					"PostgreSQL",
-					"Tailwind CSS",
-					"SCSS",
-					"PHP",
-					"MySQL",
-				],
-			},
-			{
-				company: "Üstünova Engineering",
-				position: "Summer Intern",
-				location: "Ankara, Türkiye",
-				startDate: "July 2023",
-				endDate: "August 2023",
-				notes: [
-					"Frontend development of a dashboard and a control panel for an EV charging station software, Electr-INN, using Next.js, Node.js, and Django.",
-				],
-				technologies: [
-					"JavaScript",
-					"TypeScript",
-					"React.js",
-					"Node.js",
-					"Tailwind CSS",
-					"Next.js",
-					"Django",
-				],
-			},
-		],
-	},
-	skills: {
-		title: "Skills",
-		description: "Tools and technologies I use",
-		items: [
-			{
-				title: "Programming Languages",
-				items: ["JavaScript", "Go", "TypeScript", "Python", "Java"],
-			},
-			{
-				title: "Backend Tools",
-				items: [
-					"Node.js",
-					"Express.js",
-					"Nest.js",
-					"Django",
-					"Spring Boot",
-					"Flask",
-				],
-			},
-			{
-				title: "Frontend Tools",
-				items: [
-					"React.js",
-					"React Native",
-					"Next.js",
-					"TailwindCSS",
-					"Electron",
-					"SCSS",
-				],
-			},
-			{
-				title: "Databases",
-				items: ["MongoDB", "PostgreSQL", "MySQL", "Redis"],
-			},
-			{
-				title: "DevOps",
-				items: [
-					"Github Actions",
-					"Docker",
-					"Docker Compose",
-					"AWS EC2",
-					"AWS Lambda",
-					"AWS S3",
-					"Bash",
-				],
-			},
-			{
-				title: "Other Tools",
-				items: [
-					"Git",
-					"GraphQL",
-					"Jest",
-					"Postman",
-					"Swagger",
-					"Jira",
-					"Slack",
-					"Notion",
-				],
-			},
-			{
-				title: "Design",
-				items: ["Figma", "Photoshop", "Illustrator", "XD"],
-			},
-			{
-				title: "Languages",
-				items: ["English", "Turkish"],
-			},
-		],
-	},
-	contact: {
-		title: "Contact",
-		description: "Let's connect and discuss our next project.",
-		items: [
-			{
-				title: "Email",
-				items: ["mailto:onur@onurravli.com"],
-			},
-			{
-				title: "GitHub",
-				items: ["github.com/onurravli"],
-			},
-			{
-				title: "LinkedIn",
-				items: ["linkedin.com/in/onurravli"],
-			},
-			{
-				title: "BlueSky",
-				items: ["bsky.app/profile/onurravli.com"],
-			},
-			{
-				title: "X",
-				items: ["x.com/onurravli"],
-			},
-			{
-				title: "Instagram",
-				items: ["instagram.com/onurravli"],
-			},
-		],
-	},
+// Set `hidden: true` on an item in data.js to leave it out; `--all` shows everything.
+const visible = (items) => (args.has("--all") ? items : items.filter((item) => !item.hidden));
+
+const { profile, skills, education, links } = data;
+const experience = visible(data.experience);
+const projects = visible(data.projects);
+const posts = visible(data.posts);
+const shown = (name) => args.has("--all") || data.sections[name] !== false;
+
+if (args.has("-h") || args.has("--help")) {
+  console.log(`
+  ${chalk.bold("npx onurravli")} ${chalk.dim("[options]")}
+
+  ${chalk.dim("--all")}        Include hidden sections and items
+  ${chalk.dim("--no-image")}   Skip the avatar
+  ${chalk.dim("--json")}       Print the raw data as JSON
+  ${chalk.dim("-h, --help")}   Show this help
+`);
+  process.exit(0);
+}
+
+if (args.has("--json")) {
+  console.log(JSON.stringify(data, null, 2));
+  process.exit(0);
+}
+
+const WIDTH = Math.max(40, Math.min(process.stdout.columns || 80, 100) - 4);
+const accent = chalk.hex("#ef4444");
+const PAD = "  ";
+
+/** Wraps plain text to the terminal width, indenting every line. */
+const wrap = (text, indent = PAD, firstIndent = indent) => {
+  const lines = [];
+  let line = "";
+  let prefix = firstIndent;
+  for (const word of text.split(/\s+/)) {
+    if (line && prefix.length + line.length + 1 + word.length > WIDTH) {
+      lines.push(prefix + line);
+      line = word;
+      prefix = indent;
+    } else {
+      line = line ? `${line} ${word}` : word;
+    }
+  }
+  if (line) lines.push(prefix + line);
+  return lines.join("\n");
 };
 
-/**
- *
- * @param {String} text Text to be wrapped
- * @param {wrap.IOptions} options Options for wrapping
- * @returns
- */
-const wrapText = (text, options) => {
-	return wrap(text, { width: WRAP_WIDTH * 2, ...options });
+/** Strips scheme and trailing slash for display. */
+const pretty = (url) => url.replace(/^(https?:\/\/(www\.)?|mailto:)/, "").replace(/\/$/, "");
+
+const section = (title) => {
+  const label = ` ${title.toUpperCase()} `;
+  console.log(
+    `\n${PAD}${chalk.bold.bgHex("#ef4444").white(label)} ${chalk.dim("─".repeat(WIDTH - label.length - 4))}\n`,
+  );
 };
 
-/**
- * Prints a newline
- */
-const newline = () => {
-	console.log();
+const avatar = async () => {
+  if (args.has("--no-image")) return null;
+  try {
+    const res = await fetch(profile.avatar, { signal: AbortSignal.timeout(3000) });
+    if (!res.ok) return null;
+    const buffer = Buffer.from(await res.arrayBuffer());
+    // Native inline images (iTerm, Kitty, WezTerm) are sharp but get swallowed by tmux;
+    // there, fall back to colored half-block characters.
+    if (process.env.TMUX) return `${await terminalImage.buffer(buffer, { width: 24, preferNativeRender: false })}\n`;
+    return await terminalImage.buffer(buffer, { width: "20%", height: "20%" });
+  } catch {
+    return null;
+  }
 };
 
-/**
- *
- * @param {String} text
- * @returns Bold text with highlighted sections between $ symbols
- */
-const title = (text) => {
-	const parts = text.split("$");
-	const processedText = parts
-		.map((part, index) => {
-			return index % 2 === 0 ? chalk.bold(part) : chalk.bold.bgRed.white(part);
-		})
-		.join("");
-
-	return console.log(processedText);
+const printHeader = (image) => {
+  console.log(image ? `\n${image.replace(/^/gm, PAD)}` : "");
+  console.log(`${PAD}${chalk.bold("Hi, I'm")} ${accent.bold(profile.name)}`);
+  console.log(`${PAD}${chalk.dim(`${profile.role} · ${profile.location}`)}`);
+  console.log();
+  console.log(wrap(profile.tagline));
+  const [current] = data.experience;
+  console.log();
+  console.log(`${PAD}${accent("●")} Currently ${chalk.bold(current.position)} at ${chalk.bold(current.company)}`);
 };
 
-const sectionTitle = (title, description) => {
-	return console.log(chalk.bold(title), chalk.white(description));
+const printExperience = () => {
+  if (!experience.length) return;
+  section("Experience");
+  experience.forEach((job, i) => {
+    if (i) console.log();
+    console.log(`${PAD}${chalk.bold(job.position)} ${chalk.dim("·")} ${accent.bold(job.company)}`);
+    console.log(`${PAD}${chalk.dim(`${job.start} – ${job.end} · ${job.location}`)}`);
+    for (const h of job.highlights) console.log(wrap(h, `${PAD}  `, `${PAD}${chalk.dim("›")} `));
+    console.log(chalk.dim(wrap(job.tech.join(" · "), `${PAD}  `)));
+  });
 };
 
-/**
- *
- * @param {Array} array
- */
-const printSection = (array) => {
-	if (array.length === 0) {
-		return;
-	}
-	array.forEach((section) => {
-		let items = "";
-		section.items.forEach((item, i) => {
-			if (i === section.items.length - 1) {
-				items += `${item}`;
-			} else {
-				items += `${item}, `;
-			}
-		});
-		console.log(
-			wrapText(`${chalk.bold(`• ${section.title}`)} ${items}`, {
-				width: WRAP_WIDTH,
-			}),
-		);
-	});
+const printProjects = () => {
+  if (!projects.length) return;
+  section("Projects");
+  const nameWidth = Math.max(...projects.map((p) => p.name.length)) + 2;
+  for (const p of projects) {
+    const indent = PAD + " ".repeat(nameWidth);
+    const [first, ...rest] = wrap(p.description, indent).slice(indent.length).split("\n");
+    console.log(`${PAD}${chalk.bold(p.name.padEnd(nameWidth))}${first}`);
+    if (rest.length) console.log(rest.join("\n"));
+    console.log(`${indent}${chalk.cyan(pretty(p.url))} ${chalk.dim(p.languages.join(", "))}`);
+  }
 };
 
-/**
- * Prints the experience section
- * @param {Array} array Experience items array
- */
-const printExperience = (array) => {
-	array.forEach((item) => {
-		console.log(
-			wrapText(
-				`${chalk.bold(`• ${item.position} at ${item.company}`)} — ${item.location} (${item.startDate} - ${item.endDate})`,
-				{ width: WRAP_WIDTH },
-			),
-		);
-	});
-	newline();
+const printSkills = () => {
+  section("Skills");
+  const labelWidth = Math.max(...skills.map((s) => s.title.length)) + 2;
+  for (const s of skills) {
+    const indent = PAD + " ".repeat(labelWidth);
+    const [first, ...rest] = wrap(s.items.join(", "), indent).slice(indent.length).split("\n");
+    console.log(`${PAD}${chalk.bold(s.title.padEnd(labelWidth))}${first}`);
+    if (rest.length) console.log(rest.join("\n"));
+  }
 };
 
-const main = async () => {
-	got("https://www.onurravli.com/Onur_Ravli.jpeg", {
-		responseType: "buffer",
-	})
-		.then((image) => {
-			return img.buffer(image.body, { width: "20%", height: "20%" });
-		})
-		.then((image) => {
-			newline();
-			console.log(image);
-			newline();
-			title(config.title);
-			newline();
-			console.log(wrapText(config.description, { width: WRAP_WIDTH }));
-			newline();
-			sectionTitle(config.experience.title, config.experience.description);
-			newline();
-			printExperience(config.experience.items);
-			sectionTitle(config.skills.title, config.skills.description);
-			newline();
-			printSection(config.skills.items);
-			newline();
-			sectionTitle(config.contact.title, config.contact.description);
-			newline();
-			printSection(config.contact.items);
-			newline();
-		});
+const printEducation = () => {
+  section("Education");
+  for (const e of education) {
+    console.log(`${PAD}${chalk.bold(e.degree)} ${chalk.dim("·")} ${e.school}`);
+    console.log(`${PAD}${chalk.dim(`${e.start} – ${e.end} · ${e.location}`)}`);
+  }
 };
 
-main();
+const printPosts = () => {
+  if (!posts.length) return;
+  section("Writing");
+  for (const p of posts) {
+    console.log(`${PAD}${chalk.bold(p.title)} ${chalk.dim(`· ${p.date}`)}`);
+    console.log(`${PAD}${chalk.cyan(pretty(p.url))}`);
+  }
+};
+
+const printContact = () => {
+  section("Contact");
+  const labelWidth = Math.max(...links.map((l) => l.title.length)) + 2;
+  for (const l of links) console.log(`${PAD}${chalk.bold(l.title.padEnd(labelWidth))}${chalk.cyan(pretty(l.url))}`);
+  console.log();
+  console.log(`${PAD}${chalk.dim("Full CV:")} ${chalk.cyan(pretty(profile.cv))}`);
+  console.log(`\n${PAD}${chalk.dim.italic(profile.motto)}\n`);
+};
+
+printHeader(await avatar());
+if (shown("experience")) printExperience();
+if (shown("projects")) printProjects();
+if (shown("skills")) printSkills();
+if (shown("education")) printEducation();
+if (shown("writing")) printPosts();
+if (shown("contact")) printContact();
